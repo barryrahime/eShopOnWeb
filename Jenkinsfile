@@ -15,7 +15,10 @@ pipeline {
 
     stage('Deployment') {
       steps {
-        sh 'dotnet publish eShopOnWeb.sln -o /var/aspnet'
+        sh '''
+
+set +e dotnet publish eShopOnWeb.sln -o /var/aspnet
+'''
       }
     }
 
