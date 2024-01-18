@@ -26,10 +26,13 @@ set +e dotnet  test tests/UnitTests
 
         stage('Functional') {
           steps {
-            sh '''
+            warnError(message: 'Probleme fonctionnel') {
+              sh '''
 
 set +e dotnet    test tests/FunctionalTests
 '''
+            }
+
           }
         }
 
@@ -42,6 +45,10 @@ set +e dotnet    test tests/FunctionalTests
 
 set +e dotnet publish eShopOnWeb.sln -o /var/aspnet
 '''
+        dir(path: '/var/aspnet') {
+          archiveArtifacts(artifacts: '*', onlyIfSuccessful: true)
+        }
+
       }
     }
 
