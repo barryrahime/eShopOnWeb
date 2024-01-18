@@ -8,8 +8,31 @@ pipeline {
     }
 
     stage('Integration') {
-      steps {
-        sh 'dotnet test tests/IntegrationTests'
+      parallel {
+        stage('Integration') {
+          steps {
+            sh 'dotnet test tests/IntegrationTests'
+          }
+        }
+
+        stage('Unit') {
+          steps {
+            sh '''
+
+set +e dotnet  test tests/UnitTests
+'''
+          }
+        }
+
+        stage('Functional') {
+          steps {
+            sh '''
+
+set +e dotnet    test tests/FunctionalTests
+'''
+          }
+        }
+
       }
     }
 
